@@ -1,44 +1,56 @@
-﻿const graphSteps = [
-  { line: "inputs", nodes: ["x", "w", "b", "y"], label: "Entrada, pesos, sesgo y etiqueta" },
-  { line: "multiply", nodes: ["x", "w", "multiply"], label: "Multiplicación de la entrada por los pesos" },
-  { line: "add", nodes: ["multiply", "b", "add", "z"], label: "Sumamos el sesgo para obtener z" },
-  { line: "loss", nodes: ["z", "y", "bce", "loss"], label: "La entropía cruzada binaria calcula la pérdida" },
-  { line: "backward", nodes: ["loss", "bce", "z", "add", "b", "multiply", "w"], label: "De la pérdida hacia los pesos y el sesgo" },
-  { line: "gradients", nodes: ["w", "b"], label: "Gradientes disponibles en w.grad y b.grad" },
-];
+﻿const graphScene = document.querySelector(".graph-scene");
+const graph = graphScene.querySelector(".graph");
+const nodes = [...graph.querySelectorAll("[data-graph]")];
+const lines = [...graphScene.querySelectorAll("[data-code]")];
+const arrows = [...graph.querySelectorAll(".edge")].map(edge => ({
+  edge,
+  forward: edge.textContent,
+  backward: edge.textContent === "↑" ? "↓" : "←",
+}));
 
-const template = document.querySelector("#graph-scene");
-for (const { line, nodes, label } of graphSteps) {
-  const fragment = template.content.cloneNode(true);
-  const graph = fragment.querySelector(".graph");
-  graph.setAttribute("aria-label", label);
-  fragment.querySelector(`[data-code="${line}"]`).classList.add("active-line");
+const stepNodes = {
+  inputs: ["x", "w", "b", "y"],
+  multiply: ["x", "w", "multiply"],
+  add: ["multiply", "b", "add", "z"],
+  loss: ["z", "y", "bce", "loss"],
+  backward: ["loss", "bce", "z", "add", "b", "multiply", "w"],
+  gradients: ["w", "b"],
+};
+const nodeSteps = {
+  x: "inputs", w: "inputs", b: "inputs", y: "inputs",
+  multiply: "multiply", add: "add", z: "add", bce: "loss", loss: "loss",
+};
+let selected;
 
-  nodes.forEach((node, index) => {
-    for (const item of graph.querySelectorAll(`[data-graph="${node}"]`)) {
-      item.classList.add("active");
-      item.style.setProperty("--delay", `${index * 110}ms`);
-    }
-  });
+function selectStep(step) {
+  if (step === selected) return;
+  selected = step;
+  const backward = step === "backward";
+  graph.classList.toggle("is-backward", backward);
 
-  if (line === "backward") {
-    for (const edge of graph.querySelectorAll(".edge")) {
-      edge.textContent = edge.textContent === "↑" ? "↓" : "←";
-    }
-    graph.querySelector(".input-edge").classList.add("no-gradient");
-    graph.querySelector('[data-graph="y"] .edge').classList.add("no-gradient");
+  for (const node of nodes) {
+    const index = stepNodes[step].indexOf(node.dataset.graph);
+    node.classList.toggle("active", index >= 0);
+    node.style.setProperty("--delay", backward ? `${index * 110}ms` : "0ms");
   }
-  template.before(fragment);
+  for (const line of lines) {
+    line.classList.toggle("active-line", line.dataset.code === step);
+  }
+  for (const arrow of arrows) {
+    arrow.edge.textContent = backward ? arrow.backward : arrow.forward;
+  }
 }
 
-const scenes = [...document.querySelectorAll(".scene")];
-const visibility = new IntersectionObserver((entries) => {
-  for (const entry of entries) {
-    entry.target.classList.toggle("in-view", entry.isIntersecting);
-  }
-}, { threshold: .45 });
+function selectFromEvent(event) {
+  const item = event.target.closest("[data-code], [data-graph]");
+  if (item) selectStep(item.dataset.code ?? nodeSteps[item.dataset.graph]);
+}
 
-document.querySelectorAll(".graph-scene").forEach(scene => visibility.observe(scene));
+graphScene.addEventListener("pointerover", selectFromEvent);
+graphScene.addEventListener("focusin", selectFromEvent);
+graphScene.addEventListener("click", selectFromEvent);
+
+const scenes = [...document.querySelectorAll(".scene")];
 
 document.addEventListener("keydown", (event) => {
   if (event.key !== "Enter" || event.defaultPrevented || event.repeat ||

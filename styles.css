@@ -116,13 +116,15 @@ html { scroll-snap-type: y proximity; }
 .branch-w { grid-column: 3; }
 .branch-b { grid-column: 5; }
 .branch-y { grid-column: 9; }
-.no-gradient { visibility: hidden; }
+.graph.is-backward .input-edge, .graph.is-backward .branch-y .edge { visibility: hidden; }
 .graph .active { color: #c5fc88; }
 .graph .active.node, .graph .active .node { background: #293b23; }
-.graph-scene.in-view .active { animation: ignite .55s ease-out var(--delay) both; }
+.graph.is-backward .active { animation: ignite .4s ease-out var(--delay) both; }
 
 .graph-code { color: #b7c6b8; }
 .active-line { color: #c5fc88; background: #30462b; font-weight: bold; }
+.graph-scene [tabindex] { cursor: pointer; }
+.graph-scene [tabindex]:focus-visible { outline: 2px solid #c5fc88; outline-offset: 3px; }
 
 @keyframes ignite {
   from { opacity: .4; }
@@ -139,5 +141,5 @@ html { scroll-snap-type: y proximity; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .vector, .graph-scene.in-view .active { animation: none; }
+  .vector, .graph.is-backward .active { animation: none; }
 }

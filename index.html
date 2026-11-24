@@ -156,39 +156,37 @@ wt.grad <span class="result"># tensor([2., 3.])</span></code></pre>
       </div>
     </section>
 
-    <template id="graph-scene">
       <section class="scene graph-scene" aria-label="Grafo de cálculo">
         <div class="scene-content">
           <h2>Grafo de cálculo</h2>
-          <div class="graph" role="img">
-            <span class="node" data-graph="x">x</span>
+          <div class="graph" role="group" aria-label="Operaciones del grafo">
+            <span class="node" data-graph="x" tabindex="0" aria-label="Entrada x">x</span>
             <span class="edge input-edge" data-graph="multiply">→</span>
-            <span class="node" data-graph="multiply">×</span>
+            <span class="node" data-graph="multiply" tabindex="0" aria-label="Multiplicación por los pesos">×</span>
             <span class="edge" data-graph="add">→</span>
-            <span class="node" data-graph="add">+</span>
+            <span class="node" data-graph="add" tabindex="0" aria-label="Suma del sesgo">+</span>
             <span class="edge" data-graph="add">→</span>
-            <span class="node" data-graph="z">z</span>
+            <span class="node" data-graph="z" tabindex="0" aria-label="Resultado z">z</span>
             <span class="edge" data-graph="loss">→</span>
-            <span class="node" data-graph="bce">BCE</span>
+            <span class="node" data-graph="bce" tabindex="0" aria-label="Entropía cruzada binaria">BCE</span>
             <span class="edge" data-graph="loss">→</span>
-            <span class="node" data-graph="loss">loss</span>
-            <span class="branch branch-w" data-graph="w"><span class="edge">↑</span><span class="node">w</span></span>
-            <span class="branch branch-b" data-graph="b"><span class="edge">↑</span><span class="node">b</span></span>
-            <span class="branch branch-y" data-graph="y"><span class="edge">↑</span><span class="node">y</span></span>
+            <span class="node" data-graph="loss" tabindex="0" aria-label="Pérdida">loss</span>
+            <span class="branch branch-w" data-graph="w"><span class="edge">↑</span><span class="node" tabindex="0" aria-label="Pesos w">w</span></span>
+            <span class="branch branch-b" data-graph="b"><span class="edge">↑</span><span class="node" tabindex="0" aria-label="Sesgo b">b</span></span>
+            <span class="branch branch-y" data-graph="y"><span class="edge">↑</span><span class="node" tabindex="0" aria-label="Etiqueta y">y</span></span>
           </div>
           <pre class="graph-code"><code><span>import torch
 from torch.nn.functional import binary_cross_entropy_with_logits as bce
-</span><span data-code="inputs">x, y = torch.ones(5), torch.zeros(3)
+</span><span data-code="inputs" tabindex="0">x, y = torch.ones(5), torch.zeros(3)
 w = torch.randn(5, 3, requires_grad=True)
 b = torch.randn(3, requires_grad=True)</span>
-<span data-code="multiply">weighted = x @ w</span>
-<span data-code="add">z = weighted + b</span>
-<span data-code="loss">loss = bce(z, y)</span>
-<span data-code="backward">loss.backward()</span>
-<span data-code="gradients">print(w.grad, b.grad)</span></code></pre>
+<span data-code="multiply" tabindex="0">weighted = x @ w</span>
+<span data-code="add" tabindex="0">z = weighted + b</span>
+<span data-code="loss" tabindex="0">loss = bce(z, y)</span>
+<span data-code="backward" tabindex="0">loss.backward()</span>
+<span data-code="gradients" tabindex="0">print(w.grad, b.grad)</span></code></pre>
         </div>
       </section>
-    </template>
   </main>
 </body>
 </html>
