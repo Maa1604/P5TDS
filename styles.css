@@ -99,6 +99,7 @@ html { scroll-snap-type: y proximity; }
 .scene pre code { font: inherit; }
 .card pre { margin-bottom: 0; }
 .result { color: var(--muted); }
+.code-accent { color: var(--accent); font-weight: bold; }
 
 .graph {
   display: grid;

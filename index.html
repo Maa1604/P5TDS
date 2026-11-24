@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Práctica 5 · TDS</title>
-  <link rel="stylesheet" href="styles.css?v=slate">
+  <link rel="stylesheet" href="styles.css?v=training">
   <script src="pytorch.js?v=graph-hover" defer></script>
 </head>
 <body>
@@ -221,6 +221,126 @@ train_dataloader = DataLoader(
     train_dataset,
     batch_size=512,
     shuffle=True,
+)</code></pre>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section id="modelo" class="scene" aria-labelledby="model-title">
+      <div class="scene-content">
+        <h2 id="model-title">Capa y Red</h2>
+        <p class="formula">85 → 4 → 10</p>
+        <div class="pair">
+          <article class="card">
+            <h3>Capa <small>nn.Module</small></h3>
+            <pre><code>from torch import nn
+
+class Capa(nn.Module):
+    def __init__(self, input_dim, out_dim):
+        super().__init__()
+        self.linear = nn.Linear(input_dim, out_dim)
+        self.norm = nn.BatchNorm1d(out_dim)
+        self.relu = nn.ReLU()
+
+    def forward(self, x):
+        x = self.linear(x)
+        x = self.norm(x)
+        return self.relu(x)</code></pre>
+          </article>
+          <article class="card">
+            <h3>Red <small>nn.Sequential</small></h3>
+            <pre><code>class Red(nn.Sequential):
+    def __init__(self, hidden_dim=4, dropout=0.0):
+        layers = []
+        layers.append(Capa(85, hidden_dim))
+        layers.append(nn.Dropout(dropout))
+        layers.append(nn.Linear(hidden_dim, 10))
+        super().__init__(*layers)
+
+    <span class="result"># Sequential ya implementa forward()</span></code></pre>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="epoca" class="scene" aria-labelledby="epoch-title">
+      <div class="scene-content">
+        <h2 id="epoch-title">Entrenar y validar una época</h2>
+        <div class="pair">
+          <article class="card">
+            <h3>train_epoch <small>Ajusta los pesos</small></h3>
+            <pre><code>def train_epoch(model, loader, loss_fn, optimizer):
+    <span class="code-accent">model.train()</span>
+    total_loss = correct = 0
+    for x, y in loader:
+        optimizer.zero_grad()
+        scores = model(x)
+        loss = loss_fn(scores, y)
+        <span class="code-accent">loss.backward()</span>
+        <span class="code-accent">optimizer.step()</span>
+        total_loss += loss.item()
+        correct += (scores.argmax(1) == y).sum().item()
+    return total_loss / len(loader), correct / len(loader.dataset)</code></pre>
+          </article>
+          <article class="card">
+            <h3>validate_epoch <small>Mide el rendimiento</small></h3>
+            <pre><code>def validate_epoch(model, loader, loss_fn):
+    <span class="code-accent">model.eval()</span>
+    total_loss = correct = 0
+    <span class="code-accent">with torch.no_grad():</span>
+        for x, y in loader:
+            scores = model(x)
+            loss = loss_fn(scores, y)
+            total_loss += loss.item()
+            correct += (scores.argmax(1) == y).sum().item()
+    return total_loss / len(loader), correct / len(loader.dataset)</code></pre>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="train" class="scene" aria-labelledby="train-title">
+      <div class="scene-content">
+        <h2 id="train-title">train e hiperparámetros</h2>
+        <div class="pair">
+          <article class="card">
+            <h3>Configuración inicial</h3>
+            <pre><code><span class="code-accent">learning_rate = 0.01
+batch_size = 512
+num_epochs = 5
+hidden_dim = 4
+dropout = 0.0</span>
+
+model = Red(hidden_dim, dropout)
+optimizer = torch.optim.Adam(
+    model.parameters(), lr=learning_rate
+)
+loss_fn = nn.CrossEntropyLoss()
+
+train_loader = DataLoader(
+    train_dataset, batch_size=batch_size, shuffle=True
+)
+valid_dataset = P5Dataset(features_valid_norm, labels_valid)
+val_loader = DataLoader(valid_dataset, batch_size=batch_size)</code></pre>
+          </article>
+          <article class="card">
+            <h3>Una ronda por época</h3>
+            <pre><code>def train(model, train_loader, val_loader,
+          loss_fn, optimizer, num_epochs):
+    history = []
+    for _ in range(num_epochs):
+        train_metrics = train_epoch(
+            model, train_loader, loss_fn, optimizer
+        )
+        val_metrics = validate_epoch(
+            model, val_loader, loss_fn
+        )
+        history.append((train_metrics, val_metrics))
+    return history
+
+history = train(
+    model, train_loader, val_loader,
+    loss_fn, optimizer, num_epochs
 )</code></pre>
           </article>
         </div>
