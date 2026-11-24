@@ -33,10 +33,13 @@ main { flex: 1; padding-block: clamp(2.5rem, 7vw, 6rem); cursor: pointer; }
 h1 { font-size: clamp(2.3rem, 6.3vw, 6.1rem); letter-spacing: -.065em; line-height: 1; margin: 1rem 0 1.55rem; text-wrap: balance; }
 .layout { display: grid; grid-template-columns: 1fr minmax(0, .9fr); gap: clamp(1.25rem, 4vw, 3.5rem); align-items: start; }
 #intro { font-size: clamp(1.2rem, 2.2vw, 1.7rem); line-height: 1.4; color: var(--blue); margin: 0 0 1.4rem; }
-ol { padding-left: 1.6rem; margin: 0; line-height: 1.5; }
-li { padding-left: .45rem; margin-bottom: .7rem; color: var(--muted); font-size: clamp(1rem, 1.5vw, 1.15rem); }
-li::marker { color: var(--accent); font-family: Consolas, monospace; }
-li.current { color: #f3f5ef; }
+#point {
+  margin: 0;
+  border-left: 3px solid var(--accent);
+  padding-left: .9rem;
+  font-size: clamp(1.1rem, 1.9vw, 1.4rem);
+  line-height: 1.45;
+}
 aside { border: 1px solid var(--line); border-left: 3px solid var(--accent); background: #1a2328; border-radius: .45rem; overflow: hidden; }
 pre { font: 1rem/1.55 Consolas, monospace; color: var(--accent); white-space: pre-wrap; overflow-wrap: anywhere; padding: 1.1rem; margin: 0; cursor: text; tab-size: 4; }
 aside img { display: block; width: 100%; }

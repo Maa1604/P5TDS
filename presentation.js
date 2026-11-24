@@ -3,10 +3,10 @@ const chapters = document.querySelector("#chapters");
 const previous = document.querySelector("#previous");
 const next = document.querySelector("#next");
 const progress = document.querySelector("#progress");
-const points = document.querySelector("#points");
+const point = document.querySelector("#point");
 const example = document.querySelector("#example");
 let slideIndex = 0;
-let revealed = 0;
+let revealed = 1;
 
 progress.max = slides.length;
 slides.forEach(({ title }, index) => {
@@ -20,42 +20,33 @@ function render() {
   document.querySelector("#slide-number").textContent = `${slideIndex + 1} / ${slides.length}`;
   document.querySelector("#title").textContent = slide.title;
   document.querySelector("#intro").textContent = slide.intro;
-  points.replaceChildren();
-  slide.steps.slice(0, revealed).forEach(([explanation], index) => {
-    const item = document.createElement("li");
-    item.textContent = explanation;
-    if (index === revealed - 1) item.className = "current";
-    points.append(item);
-  });
+  const [explanation, content] = slide.steps[revealed - 1];
+  point.textContent = explanation;
 
   example.replaceChildren();
-  example.hidden = revealed === 0;
-  if (revealed) {
-    const content = slide.steps[revealed - 1][1];
-    if (slideIndex === 11) {
-      const chart = new Image();
-      chart.src = `assets/${content}.png`;
-      chart.alt = content === "loss"
-        ? "La pérdida de entrenamiento y validación disminuye durante las cinco épocas."
-        : "La precisión de entrenamiento y validación aumenta durante las cinco épocas.";
-      example.append(chart);
-    } else {
-      const code = document.createElement("pre");
-      code.textContent = content;
-      example.append(code);
-    }
+  if (slideIndex === 11) {
+    const chart = new Image();
+    chart.src = `assets/${content}.png`;
+    chart.alt = content === "loss"
+      ? "La pérdida de entrenamiento y validación disminuye durante las cinco épocas."
+      : "La precisión de entrenamiento y validación aumenta durante las cinco épocas.";
+    example.append(chart);
+  } else {
+    const code = document.createElement("pre");
+    code.textContent = content;
+    example.append(code);
   }
 
   chapters.value = slideIndex;
   progress.value = slideIndex + revealed / slide.steps.length;
-  previous.disabled = slideIndex === 0 && revealed === 0;
+  previous.disabled = slideIndex === 0 && revealed === 1;
   next.textContent = finished ? "Reiniciar" : revealed === slide.steps.length ? "Siguiente diapositiva" : "Siguiente";
   document.querySelector("#status").textContent = finished
     ? "Presentación completada"
-    : `Ideas mostradas ${revealed} de ${slide.steps.length}`;
+    : `Idea ${revealed} de ${slide.steps.length}`;
 }
 
-function goTo(index, step = 0) {
+function goTo(index, step = 1) {
   slideIndex = index;
   revealed = step;
   render();
@@ -72,7 +63,7 @@ function advance() {
 }
 
 function rewind() {
-  if (revealed > 0) {
+  if (revealed > 1) {
     revealed--;
     render();
   } else if (slideIndex > 0) {
