@@ -1,0 +1,38 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Presentación interactiva sobre cómo entrenar y evaluar un clasificador de dígitos hablados con PyTorch.">
+  <title>Del audio al dígito · Práctica 5 TDS</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="slides.js"></script>
+  <script defer src="presentation.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="signal" aria-hidden="true">▂ ▆ ▃</span> TDS <span> / </span> Práctica 5</div>
+    <label>Diapositiva <select id="chapters"></select></label>
+  </header>
+  <main id="stage">
+    <div class="slide-meta"><span id="section"></span><span id="slide-number"></span></div>
+    <h1 id="title"></h1>
+    <div class="layout">
+      <div>
+        <p id="intro"></p>
+        <ol id="points"></ol>
+      </div>
+      <aside id="example" aria-label="Ejemplo"></aside>
+    </div>
+  </main>
+  <footer>
+    <progress id="progress" aria-label="Progreso de la presentación"></progress>
+    <div class="controls">
+      <button id="previous" type="button">Anterior</button>
+      <p id="status" aria-live="polite"></p>
+      <button id="next" type="button">Siguiente</button>
+    </div>
+    <p class="hint">Haz clic en la diapositiva o pulsa <kbd>Enter</kbd> para avanzar</p>
+  </footer>
+</body>
+</html>
