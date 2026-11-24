@@ -118,12 +118,19 @@ html { scroll-snap-type: y proximity; }
 .branch-y { grid-column: 9; }
 .graph.is-backward .input-edge, .graph.is-backward .branch-y .edge { visibility: hidden; }
 .graph .active { color: #c5fc88; }
-.graph .active.node, .graph .active .node { background: #293b23; }
+.graph .active.node, .graph .active .node {
+  background: #c5fc88;
+  color: #101518;
+  border-color: #c5fc88;
+}
 .graph.is-backward .active { animation: ignite .4s ease-out var(--delay) both; }
 
 .graph-code { color: #b7c6b8; }
-.active-line { color: #c5fc88; background: #30462b; font-weight: bold; }
-.graph-scene [tabindex] { cursor: pointer; }
+.graph-code [data-code] { display: inline-block; width: 100%; vertical-align: top; }
+.graph-code .active-line { color: #101518; background: #c5fc88; }
+.graph-scene [tabindex], .graph [data-graph] { cursor: pointer; }
+.graph .node:hover { outline: 2px solid #c5fc88; outline-offset: 3px; }
+.graph-code [data-code]:hover { box-shadow: inset 0 0 0 1px #c5fc88; }
 .graph-scene [tabindex]:focus-visible { outline: 2px solid #c5fc88; outline-offset: 3px; }
 
 @keyframes ignite {

@@ -41,14 +41,15 @@ function selectStep(step) {
   }
 }
 
-function selectFromEvent(event) {
-  const item = event.target.closest("[data-code], [data-graph]");
-  if (item) selectStep(item.dataset.code ?? nodeSteps[item.dataset.graph]);
+function bindSelection(item, step) {
+  const select = () => selectStep(step);
+  item.addEventListener("mouseenter", select);
+  item.addEventListener("focus", select);
+  item.addEventListener("click", select);
 }
 
-graphScene.addEventListener("pointerover", selectFromEvent);
-graphScene.addEventListener("focusin", selectFromEvent);
-graphScene.addEventListener("click", selectFromEvent);
+for (const node of nodes) bindSelection(node, nodeSteps[node.dataset.graph]);
+for (const line of lines) bindSelection(line, line.dataset.code);
 
 const scenes = [...document.querySelectorAll(".scene")];
 
