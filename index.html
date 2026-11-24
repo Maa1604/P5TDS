@@ -187,6 +187,45 @@ b = torch.randn(3, requires_grad=True)</span>
 <span data-code="gradients" tabindex="0">print(w.grad, b.grad)</span></code></pre>
         </div>
       </section>
+
+    <section id="datos" class="scene" aria-labelledby="dataset-title">
+      <div class="scene-content">
+        <h2 id="dataset-title">Dataset y DataLoader</h2>
+        <div class="pair">
+          <article class="card">
+            <h3>Dataset</h3>
+            <pre><code>import numpy as np
+from torch.utils.data import Dataset
+
+class P5Dataset(Dataset):
+    def __init__(self, features, labels):
+        assert features.shape[1] == 85
+        assert len(features) == len(labels)
+        self.features = features.astype(np.float32)
+        self.labels = labels
+
+    def __len__(self):
+        return len(self.labels)
+
+    def __getitem__(self, idx):
+        return self.features[idx], self.labels[idx]</code></pre>
+          </article>
+          <article class="card">
+            <h3>DataLoader</h3>
+            <pre><code>from torch.utils.data import DataLoader
+
+train_dataset = P5Dataset(
+    features_train_norm, labels_train
+)
+train_dataloader = DataLoader(
+    train_dataset,
+    batch_size=512,
+    shuffle=True,
+)</code></pre>
+          </article>
+        </div>
+      </div>
+    </section>
   </main>
 </body>
 </html>
