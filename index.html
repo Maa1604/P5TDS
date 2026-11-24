@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Práctica 5 · TDS</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="pytorch.js" defer></script>
 </head>
 <body>
-  <main aria-label="Vector de 85 características">
+  <main>
+    <section class="scene opening" aria-label="Vector de 85 características">
     <div class="vector">
       <span>-132.16</span>
       <span>40.1306</span>
@@ -95,6 +97,98 @@
       <span>20.7395</span>
       <span>1922.32</span>
     </div>
+    </section>
+
+    <section class="scene" aria-labelledby="pytorch-title">
+      <div class="scene-content">
+        <h1 id="pytorch-title">PyTorch</h1>
+        <div class="pair">
+          <article class="card">
+            <code class="callout">loss.backward()</code>
+            <h2>Gradientes automáticos</h2>
+          </article>
+          <article class="card">
+            <code class="callout">modelo.to("cuda")</code>
+            <h2>GPU en una línea</h2>
+            <p>Puede acelerar el entrenamiento y la inferencia.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene" aria-labelledby="comparison-title">
+      <div class="scene-content">
+        <h2 id="comparison-title">Mismo producto escalar</h2>
+        <p class="formula"><code>x = [2, 3] · w = [4, 5]</code></p>
+        <div class="pair">
+          <article class="card">
+            <h3>NumPy</h3>
+            <pre><code>np.dot(x, w) <span class="result"># 23</span></code></pre>
+          </article>
+          <article class="card">
+            <h3>PyTorch</h3>
+            <pre><code>xt = torch.tensor(x, dtype=torch.float32)
+wt = torch.tensor(w, dtype=torch.float32)
+torch.dot(xt, wt) <span class="result"># 23</span></code></pre>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene" aria-labelledby="grad-title">
+      <div class="scene-content">
+        <h2 id="grad-title">Mismo gradiente, distinto cálculo</h2>
+        <p class="formula">∂(wᵀx) / ∂w = x</p>
+        <div class="pair">
+          <article class="card">
+            <h3>NumPy <small>derivada a mano</small></h3>
+            <pre><code>grad_w = np.array(x)
+<span class="result"># [2, 3]</span></code></pre>
+          </article>
+          <article class="card">
+            <h3>PyTorch <small>Autograd</small></h3>
+            <pre><code>wt.requires_grad_(True)
+score = torch.dot(xt, wt)
+score.backward()
+wt.grad <span class="result"># tensor([2., 3.])</span></code></pre>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <template id="graph-scene">
+      <section class="scene graph-scene" aria-label="Grafo de cálculo">
+        <div class="scene-content">
+          <h2>Grafo de cálculo</h2>
+          <div class="graph" role="img">
+            <span class="node" data-graph="x">x</span>
+            <span class="edge input-edge" data-graph="multiply">→</span>
+            <span class="node" data-graph="multiply">×</span>
+            <span class="edge" data-graph="add">→</span>
+            <span class="node" data-graph="add">+</span>
+            <span class="edge" data-graph="add">→</span>
+            <span class="node" data-graph="z">z</span>
+            <span class="edge" data-graph="loss">→</span>
+            <span class="node" data-graph="bce">BCE</span>
+            <span class="edge" data-graph="loss">→</span>
+            <span class="node" data-graph="loss">loss</span>
+            <span class="branch branch-w" data-graph="w"><span class="edge">↑</span><span class="node">w</span></span>
+            <span class="branch branch-b" data-graph="b"><span class="edge">↑</span><span class="node">b</span></span>
+            <span class="branch branch-y" data-graph="y"><span class="edge">↑</span><span class="node">y</span></span>
+          </div>
+          <pre class="graph-code"><code><span>import torch
+from torch.nn.functional import binary_cross_entropy_with_logits as bce
+</span><span data-code="inputs">x, y = torch.ones(5), torch.zeros(3)
+w = torch.randn(5, 3, requires_grad=True)
+b = torch.randn(3, requires_grad=True)</span>
+<span data-code="multiply">weighted = x @ w</span>
+<span data-code="add">z = weighted + b</span>
+<span data-code="loss">loss = bce(z, y)</span>
+<span data-code="backward">loss.backward()</span>
+<span data-code="gradients">print(w.grad, b.grad)</span></code></pre>
+        </div>
+      </section>
+    </template>
   </main>
 </body>
 </html>
