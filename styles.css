@@ -1,7 +1,7 @@
 ﻿:root {
   color-scheme: dark;
   background: #101518;
-  color: #f3f5ef;
+  color: #c5fc88;
   font-family: Consolas, "Courier New", monospace;
 }
 
@@ -10,52 +10,49 @@
 body {
   min-height: 100svh;
   margin: 0;
-  padding: clamp(1rem, 4vw, 4rem);
+  padding: clamp(.5rem, 2vw, 2rem);
   display: grid;
   place-items: center;
 }
 
-main { width: min(100%, 84rem); }
-
-.vector {
-  display: grid;
-  gap: .55rem;
-  padding: .55rem clamp(.75rem, 2.5vw, 2rem);
-  border-inline: 2px solid #a8b6b7;
-  border-radius: .7rem;
+main {
+  width: min(100%, 84rem);
+  min-width: 0;
+  overflow-x: auto;
 }
 
-.row {
+.vector {
+  --columns: 5;
   display: grid;
-  /* Reserve ten characters plus padding for the longest value. */
-  grid-template-columns: repeat(auto-fill, minmax(calc(10ch + .5rem), 1fr));
-  gap: .35rem;
-  font-size: clamp(.72rem, 1.12vw, 1.12rem);
+  grid-template-columns: repeat(var(--columns), minmax(calc(10ch + .4rem), 1fr));
+  width: max-content;
+  min-width: 100%;
+  border-block-start: 1px solid;
+  border-inline-start: 1px solid;
+  font-size: clamp(.625rem, 2.8vw, 1rem);
+  font-variant-numeric: tabular-nums;
   animation: appear .36s ease-out both;
 }
 
-.row:nth-child(2) { animation-delay: .06s; }
-.row:nth-child(3) { animation-delay: .12s; }
-.row:nth-child(4) { animation-delay: .18s; }
-.row:nth-child(5) { animation-delay: .24s; }
-.row:nth-child(6) { animation-delay: .30s; }
-.row:nth-child(7) { animation-delay: .36s; }
-
-.row span {
+.vector span {
   display: grid;
   place-items: center;
-  min-height: clamp(2rem, 4.4vw, 3.55rem);
-  padding: .2rem .1rem;
-  border: 1px solid currentColor;
-  border-radius: .3rem;
-  font-variant-numeric: tabular-nums;
+  min-height: 2rem;
+  padding-inline: .15rem;
+  border-block-end: 1px solid;
+  border-inline-end: 1px solid;
   white-space: nowrap;
 }
 
-.mfcc { color: #c5fc88; }
-.delta { color: #a4d9fb; }
-.spectral { color: #d6bafb; }
-.flux { color: #ffd18d; }
+@media (min-width: 80rem) {
+  .vector {
+    --columns: 17;
+    font-size: .8125rem;
+    width: 100%;
+  }
+
+  .vector span { min-height: 3rem; }
+}
 
 @keyframes appear {
   from { opacity: 0; transform: translateY(.5rem); }
@@ -63,5 +60,5 @@ main { width: min(100%, 84rem); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .row { animation: none; }
+  .vector { animation: none; }
 }
