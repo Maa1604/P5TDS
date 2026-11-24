@@ -18,14 +18,16 @@ body {
   margin: 0;
 }
 
-html { scroll-snap-type: y proximity; }
+html { scroll-snap-type: y mandatory; }
 
 .scene {
   min-height: 100svh;
-  padding: clamp(.5rem, 2vw, 2rem);
+  min-height: 100dvh;
+  padding: clamp(.75rem, 2.5vw, 2.5rem);
   display: grid;
   place-items: center;
   scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 .vector {
@@ -58,20 +60,20 @@ html { scroll-snap-type: y proximity; }
   .vector {
     --columns: 17;
     font-size: .75rem;
-    width: min(100%, 84rem);
+    width: min(100%, 94rem);
   }
 
   .vector span { min-height: 3rem; }
 }
 
 .scene-content {
-  width: min(100%, 65rem);
+  width: min(100%, 100rem);
   min-width: 0;
-  padding-block: 2rem;
+  padding-block: 1rem;
 }
 
 .scene h1, .scene h2, .scene h3, .scene p { margin-block: 0; }
-.scene-content > h1, .scene-content > h2 { font-size: clamp(1.6rem, 5vw, 4rem); }
+.scene-content > h1, .scene-content > h2 { font-size: clamp(1.6rem, min(5vw, 8vh), 4.5rem); }
 .scene-content > h1 { font-size: clamp(3rem, 10vw, 7rem); }
 .scene-content > h1, .callout { color: var(--accent); }
 .scene .formula { margin-top: 1rem; font-size: clamp(.95rem, 3vw, 1.45rem); }
@@ -95,7 +97,12 @@ html { scroll-snap-type: y proximity; }
 .card small { font-size: .85rem; font-weight: normal; }
 .card p { margin-top: .6rem; }
 .callout { display: block; margin-bottom: .8rem; font-size: clamp(.9rem, 3vw, 1.6rem); }
-.scene pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: clamp(.78rem, 2.5vw, 1rem); line-height: 1.55; }
+.scene pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: clamp(.82rem, min(2.5vw, 2.25vh), 1.3rem);
+  line-height: 1.4;
+}
 .scene pre code { font: inherit; }
 .card pre { margin-bottom: 0; }
 .result { color: var(--muted); }

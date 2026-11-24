@@ -52,14 +52,44 @@ for (const node of nodes) bindSelection(node, nodeSteps[node.dataset.graph]);
 for (const line of lines) bindSelection(line, line.dataset.code);
 
 const scenes = [...document.querySelectorAll(".scene")];
+let lastWheelAt = -Infinity;
+let wheelHandled = false;
+
+function currentSceneIndex() {
+  const center = window.innerHeight / 2;
+  return scenes.findIndex(scene => scene.getBoundingClientRect().bottom > center);
+}
+
+window.addEventListener("wheel", (event) => {
+  if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey ||
+      Math.abs(event.deltaX) >= Math.abs(event.deltaY)) return;
+
+  if (event.timeStamp - lastWheelAt > 180) wheelHandled = false;
+  lastWheelAt = event.timeStamp;
+  if (wheelHandled) {
+    event.preventDefault();
+    return;
+  }
+
+  const direction = Math.sign(event.deltaY);
+  const index = currentSceneIndex();
+  if (index < 0) return;
+  const scene = scenes[index].getBoundingClientRect();
+  const canScrollWithin = direction > 0 ? scene.bottom > window.innerHeight + 2 : scene.top < -2;
+  const next = scenes[index + direction];
+  if (canScrollWithin || !next || !event.cancelable) return;
+
+  event.preventDefault();
+  wheelHandled = true;
+  next.scrollIntoView({ block: "start" });
+}, { passive: false });
 
 document.addEventListener("keydown", (event) => {
   if (event.key !== "Enter" || event.defaultPrevented || event.repeat ||
       event.altKey || event.ctrlKey || event.metaKey || event.shiftKey ||
       event.target.closest("button, a, input, select, textarea, [contenteditable]")) return;
 
-  const center = window.innerHeight / 2;
-  const current = scenes.findIndex(scene => scene.getBoundingClientRect().bottom > center);
+  const current = currentSceneIndex();
   const next = scenes[current + 1];
   if (current < 0 || !next) return;
   event.preventDefault();
