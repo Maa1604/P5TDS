@@ -26,10 +26,11 @@ main { width: min(100%, 84rem); }
 }
 
 .row {
-  --columns: 13;
   display: grid;
-  grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+  /* Reserve ten characters plus padding for the longest value. */
+  grid-template-columns: repeat(auto-fill, minmax(calc(10ch + .5rem), 1fr));
   gap: .35rem;
+  font-size: clamp(.72rem, 1.12vw, 1.12rem);
   animation: appear .36s ease-out both;
 }
 
@@ -47,8 +48,8 @@ main { width: min(100%, 84rem); }
   padding: .2rem .1rem;
   border: 1px solid currentColor;
   border-radius: .3rem;
-  font-size: clamp(.72rem, 1.12vw, 1.12rem);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .mfcc { color: #c5fc88; }
@@ -56,25 +57,9 @@ main { width: min(100%, 84rem); }
 .spectral { color: #d6bafb; }
 .flux { color: #ffd18d; }
 
-.dimension {
-  margin-top: 1rem;
-  color: #f3f5ef;
-  text-align: center;
-  font-size: clamp(2rem, 5vw, 4.5rem);
-  line-height: 1;
-}
-
 @keyframes appear {
   from { opacity: 0; transform: translateY(.5rem); }
   to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 60rem) {
-  .row { --columns: 7; }
-}
-
-@media (max-width: 32rem) {
-  .row { --columns: 4; }
 }
 
 @media (prefers-reduced-motion: reduce) {
