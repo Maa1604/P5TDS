@@ -270,7 +270,7 @@ class Capa(nn.Module):
     <span class="code-accent">model.train()</span>
     total_loss = correct = 0
     for x, y in loader:
-        optimizer.zero_grad()
+        <span class="code-accent">optimizer.zero_grad()</span>
         scores = model(x)
         loss = loss_fn(scores, y)
         <span class="code-accent">loss.backward()</span>
@@ -309,10 +309,10 @@ hidden_dim = 4
 dropout = 0.0</span>
 
 model = Red(hidden_dim, dropout)
-optimizer = torch.optim.Adam(
+<span class="code-accent">optimizer = torch.optim.Adam(
     model.parameters(), lr=learning_rate
 )
-loss_fn = nn.CrossEntropyLoss()
+loss_fn = nn.CrossEntropyLoss()</span>
 
 train_loader = DataLoader(
     train_dataset, batch_size=batch_size, shuffle=True
@@ -329,10 +329,10 @@ val_loader = DataLoader(valid_dataset, batch_size=batch_size)</code></pre>
         train_metrics = train_epoch(
             model, train_loader, loss_fn, optimizer
         )
-        val_metrics = validate_epoch(
+        <span class="code-accent">val_metrics = validate_epoch(
             model, val_loader, loss_fn
-        )
-        history.append((train_metrics, val_metrics))
+        )</span>
+        <span class="code-accent">history.append((train_metrics, val_metrics))</span>
     return history
 
 history = train(
