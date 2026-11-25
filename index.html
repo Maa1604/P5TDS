@@ -332,7 +332,7 @@ val_loader = DataLoader(valid_dataset, batch_size=batch_size)</code></pre>
         val_metrics = validate_epoch(
             model, val_loader, loss_fn
         )</span>
-        <span class="code-accent">history.append((train_metrics, val_metrics))</span>
+        history.append((train_metrics, val_metrics))
     return history
 
 history = train(
