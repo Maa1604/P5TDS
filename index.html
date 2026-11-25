@@ -201,14 +201,17 @@ class P5Dataset(Dataset):
     def __init__(self, features, labels):
         assert features.shape[1] == 85
         assert len(features) == len(labels)
-        self.features = features.astype(np.float32)
-        self.labels = labels
+        <span class="result"># Guardamos los datos en esta instancia (self).</span>
+        <span class="code-accent">self.features = features.astype(np.float32)
+        self.labels = labels</span>
 
     def __len__(self):
-        return len(self.labels)
+        <span class="result"># Número de ejemplos del dataset.</span>
+        <span class="code-accent">return len(self.labels)</span>
 
     def __getitem__(self, idx):
-        return self.features[idx], self.labels[idx]</code></pre>
+        <span class="result"># Devuelve el vector y la etiqueta de dataset[idx].</span>
+        <span class="code-accent">return self.features[idx], self.labels[idx]</span></code></pre>
           </article>
           <article class="card">
             <h3>DataLoader</h3>
