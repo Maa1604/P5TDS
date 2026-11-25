@@ -309,10 +309,10 @@ hidden_dim = 4
 dropout = 0.0</span>
 
 model = Red(hidden_dim, dropout)
-<span class="code-accent">optimizer = torch.optim.Adam(
+optimizer = torch.optim.Adam(
     model.parameters(), lr=learning_rate
 )
-loss_fn = nn.CrossEntropyLoss()</span>
+loss_fn = nn.CrossEntropyLoss()
 
 train_loader = DataLoader(
     train_dataset, batch_size=batch_size, shuffle=True
@@ -329,7 +329,7 @@ val_loader = DataLoader(valid_dataset, batch_size=batch_size)</code></pre>
         train_metrics = train_epoch(
             model, train_loader, loss_fn, optimizer
         )
-        <span class="code-accent">val_metrics = validate_epoch(
+        val_metrics = validate_epoch(
             model, val_loader, loss_fn
         )</span>
         <span class="code-accent">history.append((train_metrics, val_metrics))</span>
