@@ -106,12 +106,12 @@ html { scroll-snap-type: y mandatory; }
 .scene pre code { font: inherit; }
 .card pre { margin-bottom: 0; }
 .result { color: var(--muted); }
-.code-accent { color: var(--accent); font-weight: bold; }
-.dataset-pair .card { margin: 0; align-self: start; }
-.dataset-pair .code-accent {
+.code-accent {
   color: #ffe08a;
   background: #493b24;
+  font-weight: bold;
 }
+.dataset-pair .card { margin: 0; align-self: start; }
 
 .graph {
   display: grid;
