@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Práctica 5 · TDS</title>
-  <link rel="stylesheet" href="styles.css?v=fullscreen">
+  <link rel="stylesheet" href="styles.css?v=dataset-highlight">
   <script src="pytorch.js?v=fullscreen" defer></script>
 </head>
 <body>
@@ -191,10 +191,10 @@ b = torch.randn(3, requires_grad=True)</span>
     <section id="datos" class="scene" aria-labelledby="dataset-title">
       <div class="scene-content">
         <h2 id="dataset-title">Dataset y DataLoader</h2>
-        <div class="pair">
-          <article class="card">
+        <div class="pair dataset-pair">
+          <article>
             <h3>Dataset</h3>
-            <pre><code>import numpy as np
+            <pre class="card"><code>import numpy as np
 from torch.utils.data import Dataset
 
 class P5Dataset(Dataset):
@@ -213,9 +213,9 @@ class P5Dataset(Dataset):
         <span class="result"># Devuelve el vector y la etiqueta de dataset[idx].</span>
         <span class="code-accent">return self.features[idx], self.labels[idx]</span></code></pre>
           </article>
-          <article class="card">
+          <article>
             <h3>DataLoader</h3>
-            <pre><code>from torch.utils.data import DataLoader
+            <pre class="card"><code>from torch.utils.data import DataLoader
 
 train_dataset = P5Dataset(
     features_train_norm, labels_train

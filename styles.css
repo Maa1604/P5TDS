@@ -107,6 +107,11 @@ html { scroll-snap-type: y mandatory; }
 .card pre { margin-bottom: 0; }
 .result { color: var(--muted); }
 .code-accent { color: var(--accent); font-weight: bold; }
+.dataset-pair .card { margin: .65rem 0 0; }
+.dataset-pair .code-accent {
+  color: #ffe08a;
+  background: #493b24;
+}
 
 .graph {
   display: grid;
